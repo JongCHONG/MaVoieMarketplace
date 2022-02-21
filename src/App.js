@@ -1,25 +1,76 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import styled from 'styled-components'
+
+import { InitialList } from './components/InitialList'
+import Header from './components/Header'
+import Item from './components/Item'
+import ListTitle from './components/ListTitle'
+
+const List = styled.section`
+  background-color: #dbe9ee;
+`
+
+const App = () => {
+  const [actualList, setActualList] = useState(InitialList)
+  const [totalItems, setTotalItems] = useState(0)
+
+  useEffect(() => {
+    calculateTotalItem()
+  },[actualList])
+
+  const handleCount = (index, value) => {
+    const updatedList = [...actualList]
+    let { quantity } = updatedList[index]
+    if (quantity >= 0) {
+      quantity = quantity + value
+      if (quantity === -1) {
+        quantity = 0        
+      }
+    } 
+    updatedList[index] = {
+      ...updatedList[index],
+      quantity
+    }
+    setActualList(updatedList)
+  }
+  const handleDelete = (index) => {
+    const array = [...actualList]
+    array.splice(index, 1)
+    setActualList(array)
+  }
+  const calculateTotalItem = () => {
+    let total = 0
+    actualList.map(element => 
+      total = total + element.quantity
+    )
+    setTotalItems(total)
+  }
+
+  // console.log(totalItems)
+  return ( 
+    <>
+      <Header totalItems={totalItems} />
+      <List>
+        <div className='container'>
+          <ListTitle />
+          {actualList.map((element, index) => 
+            <Item
+              key={index} 
+              index={index}
+              label={element.label} 
+              price={element.price} 
+              quantity={element.quantity}
+              handleCount={handleCount}
+              handleDelete={handleDelete}
+            />
+          )}
+        </div>
+      </List>
+    </>
+  )
 }
 
-export default App;
+export default App
