@@ -8,6 +8,7 @@ import { InitialList } from './components/InitialList'
 import Header from './components/Header'
 import Item from './components/Item'
 import ListTitle from './components/ListTitle'
+import MyVerticallyCenteredModal from './components/Modal'
 
 const List = styled.section`
   background-color: #dbe9ee;
@@ -16,6 +17,7 @@ const List = styled.section`
 const App = () => {
   const [actualList, setActualList] = useState(InitialList)
   const [totalItems, setTotalItems] = useState(0)
+  const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
     calculateTotalItem()
@@ -48,6 +50,18 @@ const App = () => {
     )
     setTotalItems(total)
   }
+  const handlenewitem = (itemName, quantity, price) => {
+    let updatedList = [...actualList]
+    updatedList = [
+      ...updatedList,
+      {
+        label: itemName,
+        price: Number(price),
+        quantity: Number(quantity)
+      }
+    ]
+    setActualList(updatedList)
+  }
 
   // console.log(totalItems)
   return ( 
@@ -69,6 +83,20 @@ const App = () => {
           )}
         </div>
       </List>
+      <MyVerticallyCenteredModal
+        show={modalShow}
+        onHide={() => setModalShow(false)}
+        handlenewitem={handlenewitem}
+      />
+      <div className='text-center my-3'>
+        <button 
+          type="button" 
+          className="btn btn-outline-danger"
+          onClick={() => setModalShow(true)}
+        >
+          Add new item
+        </button>
+      </div>
     </>
   )
 }
