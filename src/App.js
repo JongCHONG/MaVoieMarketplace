@@ -20,6 +20,13 @@ const App = () => {
   const [modalShow, setModalShow] = useState(false);
 
   useEffect(() => {
+    const calculateTotalItem = () => {
+      let total = 0
+      actualList.map(element => 
+        total = total + element.quantity
+      )
+      setTotalItems(total)
+    }
     calculateTotalItem()
   },[actualList])
 
@@ -42,13 +49,6 @@ const App = () => {
     const array = [...actualList]
     array.splice(index, 1)
     setActualList(array)
-  }
-  const calculateTotalItem = () => {
-    let total = 0
-    actualList.map(element => 
-      total = total + element.quantity
-    )
-    setTotalItems(total)
   }
   const handlenewitem = (itemName, quantity, price) => {
     let updatedList = [...actualList]
