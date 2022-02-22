@@ -6,6 +6,7 @@ const MyVerticallyCenteredModal = ({ handlenewitem, onHide, show }) => {
   const [itemName, setItemName] = useState(null)
   const [quantity, setQuantity] = useState(null)
   const [price, setPrice] = useState(null)
+  const [error, setError] = useState(null)
 
   const handleItemName = (e) => {
     setItemName(e.target.value)
@@ -17,8 +18,19 @@ const MyVerticallyCenteredModal = ({ handlenewitem, onHide, show }) => {
     setPrice(e.target.value)
   }
   const handleSubmit = (e) => {
-    e.preventDefault()    
-    handlenewitem(itemName, quantity, price)
+    e.preventDefault()
+    if (!itemName) {
+      setError("Enter a name.")
+    } else if (quantity < 0 || price < 0) {
+      setError("Incorrect price or quantity.")
+    } else {
+      setError("")      
+      handlenewitem(itemName, quantity, price)
+      onHide()
+    }
+  }
+  const handleCancel = () => {
+    setError("")
     onHide()
   }
 
@@ -71,10 +83,15 @@ const MyVerticallyCenteredModal = ({ handlenewitem, onHide, show }) => {
           </div>
         </Modal.Body>
         <Modal.Footer>
+          {error && 
+            <div className='text-danger'>
+              {error}
+            </div>
+          }
           <button 
             type="button" 
             className="btn btn-outline-secondary" 
-            onClick={onHide}
+            onClick={handleCancel}
           >
             Cancel
           </button>
