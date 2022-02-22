@@ -24,8 +24,11 @@ const MyVerticallyCenteredModal = ({ handlenewitem, onHide, show }) => {
     } else if (quantity < 0 || price < 0) {
       setError("Incorrect price or quantity.")
     } else {
-      setError("")      
       handlenewitem(itemName, quantity, price)
+      setError("")
+      setItemName("")
+      setPrice("")
+      setQuantity("")
       onHide()
     }
   }
